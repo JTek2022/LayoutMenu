@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Clipboard Copier</title>
+    <style>
+        .photo-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .photo {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        .tooltip {
+            position: fixed;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Click on a photo to copy its description to clipboard</h1>
+    <div class="photo-container">
+        <img src="https://picsum.photos/200/200?random=1" alt="Random Photo 1" class="photo" data-text="Description for Photo 1">
+        <img src="https://picsum.photos/200/200?random=2" alt="Random Photo 2" class="photo" data-text="Description for Photo 2">
+        <img src="https://picsum.photos/200/200?random=3" alt="Random Photo 3" class="photo" data-text="Description for Photo 3">
+    </div>
+    <div class="tooltip" id="tooltip">Copied to clipboard!</div>
+
+    <script>
+        const photos = document.querySelectorAll('.photo');
+        const tooltip = document.getElementById('tooltip');
+
+        photos.forEach(photo => {
+            photo.addEventListener('click', () => {
+                const text = photo.getAttribute('data-text');
+                navigator.clipboard.writeText(text).then(() => {
+                    showTooltip(photo);
+                });
+            });
+        });
+
+        function showTooltip(element) {
+            const rect = element.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+            tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+            tooltip.style.display = 'block';
+            setTimeout(() => {
+                tooltip.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
